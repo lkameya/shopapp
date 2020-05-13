@@ -1,5 +1,7 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StatusBar} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {StatusBar} from 'react-native';
 import {
   ApolloClient,
   ApolloProvider,
@@ -7,11 +9,9 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import {setContext} from '@apollo/link-context';
-
-import Items from './src/components/Items';
-// import Header from './src/components/Header';
-
 import {AsyncStorage} from 'react-native';
+import ItemsScreen from './src/screens/ItemsScreen';
+import SingleItemScreen from './src/screens/SingleItemScreen';
 
 const httpLink = createHttpLink({
   uri: 'https://yoga.lkameya.com',
@@ -40,16 +40,27 @@ const client = new ApolloClient({
   cache,
 });
 
+const Stack = createStackNavigator();
+
 const App: React.FC = () => {
   return (
-    <ApolloProvider client={client}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView>
-          <Items />
-        </ScrollView>
-      </SafeAreaView>
-    </ApolloProvider>
+    <NavigationContainer>
+      <ApolloProvider client={client}>
+        <StatusBar barStyle="dark-content" />
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={ItemsScreen}
+            options={{title: '.thriftstore.'}}
+          />
+          <Stack.Screen
+            name="Item"
+            component={SingleItemScreen}
+            options={{title: 'Details'}}
+          />
+        </Stack.Navigator>
+      </ApolloProvider>
+    </NavigationContainer>
   );
 };
 

@@ -1,13 +1,28 @@
-import React, {useState} from 'react';
-import {Container} from './styles';
-import {Text, Image} from 'react-native';
+import React from 'react';
+import {Image, Dimensions, TouchableHighlight} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-function Item({item}) {
+let {width} = Dimensions.get('window');
+
+let numberGrid = 2;
+let itemWidth = width / numberGrid;
+
+interface Item {
+  image: string;
+  id: string;
+}
+
+function Item({item}: {item: Item}) {
+  const navigation = useNavigation();
+
   return (
-    <Container>
-      <Text>{item.title}</Text>
-      <Image source={{uri: item.image}} style={{width: 200, height: 200}} />
-    </Container>
+    <TouchableHighlight
+      onPress={() => navigation.navigate('Item', {id: item.id})}>
+      <Image
+        source={{uri: item.image}}
+        style={{width: itemWidth - 10, height: itemWidth - 10}}
+      />
+    </TouchableHighlight>
   );
 }
 

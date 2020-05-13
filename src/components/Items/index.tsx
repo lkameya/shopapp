@@ -3,7 +3,12 @@ import {gql, useQuery} from '@apollo/client';
 import Item from '../Item';
 import {perPage} from '../../config';
 import {ItemsContainer} from './styles';
-import {Text} from 'react-native';
+import {Text, FlatList, View, Dimensions, ScrollView} from 'react-native';
+
+let {width} = Dimensions.get('window');
+
+let numberGrid = 2;
+let itemWidth = width / numberGrid;
 
 const ALL_ITEMS_QUERY = gql`
   query ALL_ITEMS_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
@@ -27,13 +32,21 @@ function Items({page}) {
   if (loading || !data) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
 
+  const renderItem = ({item}) => {
+    return (
+      <View style={{padding: 5}}>
+        <Item item={item} key={item.id} />
+      </View>
+    );
+  };
+
   return (
     <>
-      <ItemsContainer>
-        {data.items.map((item) => (
-          <Item item={item} key={item.id} />
-        ))}
-      </ItemsContainer>
+      <FlatList
+        data={data.items}
+        renderItem={renderItem}
+        numColumns={numberGrid}
+      />
     </>
   );
 }
