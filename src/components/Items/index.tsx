@@ -2,13 +2,15 @@ import React from 'react';
 import {gql, useQuery} from '@apollo/client';
 import Item from '../Item';
 import {perPage} from '../../config';
-import {ItemsContainer} from './styles';
-import {Text, FlatList, View, Dimensions, ScrollView} from 'react-native';
-
-let {width} = Dimensions.get('window');
+import {StyleSheet, Text, FlatList, View} from 'react-native';
 
 let numberGrid = 2;
-let itemWidth = width / numberGrid;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+  },
+});
 
 const ALL_ITEMS_QUERY = gql`
   query ALL_ITEMS_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
@@ -23,18 +25,23 @@ const ALL_ITEMS_QUERY = gql`
   }
 `;
 
-function Items({page}) {
+function Items({page}: {page: number}) {
   const {loading, error, data} = useQuery(ALL_ITEMS_QUERY, {
     variables: {skip: page * perPage - perPage},
     //fetchPolicy: "network-only"
   });
 
-  if (loading || !data) return <Text>Loading...</Text>;
-  if (error) return <Text>Error: {error.message}</Text>;
+  if (loading || !data) {
+    return <Text>Loading...</Text>;
+  }
 
-  const renderItem = ({item}) => {
+  if (error) {
+    return <Text>Error: {error.message}</Text>;
+  }
+
+  const renderItem = ({item}: {item: Item}) => {
     return (
-      <View style={{padding: 5}}>
+      <View style={styles.container}>
         <Item item={item} key={item.id} />
       </View>
     );
