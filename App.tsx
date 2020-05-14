@@ -12,13 +12,14 @@ import {setContext} from '@apollo/link-context';
 import {AsyncStorage} from 'react-native';
 import ItemsScreen from './src/screens/ItemsScreen';
 import SingleItemScreen from './src/screens/SingleItemScreen';
+import CartScreen from './src/screens/CartScreen';
 
 const httpLink = createHttpLink({
-  uri: 'https://yoga.lkameya.com',
+  uri: 'http://localhost:4444/',
 });
 
-const authLink = setContext((_, {headers}) => {
-  const token = AsyncStorage.getItem('token');
+const authLink = setContext(async (_, {headers}) => {
+  const token = await AsyncStorage.getItem('token');
   return {
     headers: {
       ...headers,
@@ -57,6 +58,11 @@ const App: React.FC = () => {
             name="Item"
             component={SingleItemScreen}
             options={{title: 'Details'}}
+          />
+          <Stack.Screen
+            name="Cart"
+            component={CartScreen}
+            options={{title: 'Cart'}}
           />
         </Stack.Navigator>
       </ApolloProvider>

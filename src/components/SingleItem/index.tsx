@@ -4,6 +4,7 @@ import {RouteProp, useNavigation} from '@react-navigation/native';
 import {useRoute} from '@react-navigation/native';
 import {gql, useQuery} from '@apollo/client';
 import formatMoney from '../../utils/formatMoney';
+import AddToCart from '../AddToCart';
 
 type RootStackParamList = {
   Home: undefined;
@@ -49,14 +50,15 @@ const SingleItem = () => {
   const route = useRoute<SingleItemScreenRouteProp>();
   const navigation = useNavigation();
   const {id} = route.params;
-
   const {data, loading} = useQuery(SINGLE_ITEM_QUERY, {
     variables: {id},
   });
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <Button title="Add to cart" />,
+      headerRight: () => (
+        <Button title="Cart" onPress={() => navigation.navigate('Cart')} />
+      ),
     });
   }, [navigation]);
 
@@ -76,7 +78,7 @@ const SingleItem = () => {
       />
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.text}>{item.description}</Text>
-      <Button title="add to cart" />
+      <AddToCart id={item.id} />
     </>
   );
 };

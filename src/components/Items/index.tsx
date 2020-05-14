@@ -1,8 +1,9 @@
-import React from 'react';
-import {gql, useQuery} from '@apollo/client';
+import React, {useEffect} from 'react';
+import {gql, useQuery, useMutation} from '@apollo/client';
 import Item from '../Item';
 import {perPage} from '../../config';
 import {StyleSheet, Text, FlatList, View} from 'react-native';
+import {AsyncStorage} from 'react-native';
 
 let numberGrid = 2;
 
@@ -25,11 +26,28 @@ const ALL_ITEMS_QUERY = gql`
   }
 `;
 
+const SIGN_IN_MUTATION = gql`
+  mutation SIGN_IN_MUTATION($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
+      token
+    }
+  }
+`;
+
 function Items({page}: {page: number}) {
   const {loading, error, data} = useQuery(ALL_ITEMS_QUERY, {
     variables: {skip: page * perPage - perPage},
     //fetchPolicy: "network-only"
   });
+
+  const [signin] = useMutation(SIGN_IN_MUTATION, {
+    variables: {email: 'admin@gmail.com', password: '123'},
+    onCompleted: ({signin: {token}}) => AsyncStorage.setItem('token', token),
+  });
+
+  useEffect(() => {
+    signin();
+  }, [signin]);
 
   if (loading || !data) {
     return <Text>Loading...</Text>;
