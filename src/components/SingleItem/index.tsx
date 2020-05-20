@@ -1,5 +1,12 @@
 import React, {useLayoutEffect} from 'react';
-import {StyleSheet, Text, Image, Button} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Image,
+  Button,
+  ActivityIndicator,
+  View,
+} from 'react-native';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {useRoute} from '@react-navigation/native';
 import {gql, useQuery} from '@apollo/client';
@@ -26,6 +33,15 @@ const SINGLE_ITEM_QUERY = gql`
 `;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -63,7 +79,11 @@ const SingleItem = () => {
   }, [navigation]);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   const {item} = data;

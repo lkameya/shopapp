@@ -13,9 +13,10 @@ import {AsyncStorage} from 'react-native';
 import ItemsScreen from './src/screens/ItemsScreen';
 import SingleItemScreen from './src/screens/SingleItemScreen';
 import CartScreen from './src/screens/CartScreen';
+import SplashScreen from './src/screens/SplashScreen';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4444/',
+  uri: 'https://yoga.lkameya.com/',
 });
 
 const authLink = setContext(async (_, {headers}) => {
@@ -63,6 +64,11 @@ const App: React.FC = () => {
             name="Cart"
             component={CartScreen}
             options={{title: 'Cart'}}
+          />
+          <Stack.Screen
+            name="Splash"
+            component={SplashScreen}
+            options={{title: 'Splash'}}
           />
         </Stack.Navigator>
       </ApolloProvider>

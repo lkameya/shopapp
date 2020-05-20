@@ -1,6 +1,6 @@
 import React from 'react';
 import {gql, useMutation} from '@apollo/client';
-import {Button, Text} from 'react-native';
+import {Button, Text, ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const ADD_TO_CART_MUTATION = gql`
@@ -24,7 +24,7 @@ function AddToCart({id}: {id: string}) {
   }
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <ActivityIndicator size="large" />;
   }
 
   return (

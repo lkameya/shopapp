@@ -6,7 +6,11 @@ function CartItem({cartItem}) {
   if (!cartItem.item) return <Text>This Item has been removed</Text>;
 
   return (
-    <View style={{flexDirection: 'row', padding: 10}}>
+    <View
+      style={{
+        flexDirection: 'row',
+        backgroundColor: 'white',
+      }}>
       {/* <img width="100" src={cartItem.item.image} alt={cartItem.item.title} /> */}
       <Image
         source={{uri: cartItem.item.image}}

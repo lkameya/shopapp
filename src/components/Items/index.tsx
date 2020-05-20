@@ -2,7 +2,13 @@ import React, {useEffect} from 'react';
 import {gql, useQuery, useMutation} from '@apollo/client';
 import Item from '../Item';
 import {perPage} from '../../config';
-import {StyleSheet, Text, FlatList, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  FlatList,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {AsyncStorage} from 'react-native';
 
 let numberGrid = 2;
@@ -10,6 +16,15 @@ let numberGrid = 2;
 const styles = StyleSheet.create({
   container: {
     padding: 5,
+  },
+  containerLoading: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
   },
 });
 
@@ -50,7 +65,11 @@ function Items({page}: {page: number}) {
   }, [signin]);
 
   if (loading || !data) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={[styles.containerLoading, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   if (error) {
